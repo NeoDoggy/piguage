@@ -7,12 +7,12 @@ import pygame
 #   testingStatus = False
 
 testingStatus = True
-
+oFY = 100
 scale=2.4
 
 #   Screen Size
 WIDTH, HEIGHT = 800, 480  # use your screens display information
-WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.DOUBLEBUF)
+WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.DOUBLEBUF)# pygame.FULLSCREEN
 WIN.fill((26,28,26))
 FPS = 60
 
@@ -36,18 +36,18 @@ FONT_SMALL = int(67/scale)     #   Odo Size
 
 
 #   Locations for gauge graphics, each has the same start XY but builds upon it, check images folder
-RPM_XY = (135/scale, 5)
-COOLANT_XY = (1481/scale, 105/scale)
-EGT_XY = (1599/scale, 105/scale)
-OILPRESSURE_XY = (1711/scale, 105/scale)
-BOOST_XY = (1822/scale, 105/scale)
-CLOCK_XY = (555/scale, 620/scale+1)
-FUEL_XY = (1560/scale, 620/scale)
-ODO_XY = (60/scale, 644/scale)
-ODO_L_XY = (395/scale, 678/scale)
-MFA_XY = (1435/scale, 668/scale)
-MFABG_XY = (1021/scale, 563/scale)
-SPEEDO_XY = (1247/scale, 305/scale)
+RPM_XY = (135/scale, 5/scale+oFY)
+COOLANT_XY = (1481/scale, 105/scale+oFY)
+EGT_XY = (1599/scale, 105/scale+oFY)
+OILPRESSURE_XY = (1711/scale, 105/scale+oFY)
+BOOST_XY = (1822/scale, 105/scale+oFY)
+CLOCK_XY = (555/scale, 620/scale+1+oFY)
+FUEL_XY = (1560/scale, 620/scale+oFY)
+ODO_XY = (60/scale, 644/scale+oFY)
+ODO_L_XY = (395/scale, 678/scale+oFY)
+MFA_XY = (1435/scale, 668/scale+oFY)
+MFABG_XY = (1021/scale, 563/scale+oFY)
+SPEEDO_XY = (1247/scale, 305/scale+oFY)
 
 
 

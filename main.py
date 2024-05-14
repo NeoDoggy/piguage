@@ -35,6 +35,9 @@ import os
 #   Date time is for the clock and perhaps MQTT
 #   Paho to handle the MQTT subscription from Node-Red
 
+# offset
+oFY = 100
+
 # Setup Display
 pygame.init()
 
@@ -253,7 +256,7 @@ def draw_fuel_text():
     digital_fuel = fuel_status
     fuel_text = digital_font.render(str(int(digital_fuel)), True, NEON_GREEN)
     text_rect = fuel_text.get_rect()
-    text_rect.midright = 1717, 667
+    text_rect.midright = 1717, 667+oFY
     WIN.blit(fuel_text, text_rect)
 
 
@@ -291,35 +294,35 @@ def draw_indicators():
     '''
 
     if illumination_state == 1:
-        WIN.blit(indicator_images[0], (45/2.4, 460/2.4))
+        WIN.blit(indicator_images[0], (45/2.4, 460/2.4+oFY))
     if foglight_state == 1:
-        WIN.blit(indicator_images[1], (185/2.4, 460/2.4))
+        WIN.blit(indicator_images[1], (185/2.4, 460/2.4+oFY))
     if defog_state == 1:
-        WIN.blit(indicator_images[2], (325/2.4, 460/2.4))
+        WIN.blit(indicator_images[2], (325/2.4, 460/2.4+oFY))
     if highbeam_state == 1:
-        WIN.blit(indicator_images[3], (465/2.4, 460/2.4))
+        WIN.blit(indicator_images[3], (465/2.4, 460/2.4+oFY))
     if leftturn_state == 1:
-        WIN.blit(indicator_images[4], (605/2.4, 460/2.4))
+        WIN.blit(indicator_images[4], (605/2.4, 460/2.4+oFY))
     if rightturn_state == 1:
-        WIN.blit(indicator_images[5], (1220/2.4, 460/2.4))
+        WIN.blit(indicator_images[5], (1220/2.4, 460/2.4+oFY))
     if brakewarn_state == 1:
-        WIN.blit(indicator_images[6], (1360/2.4, 460/2.4))
+        WIN.blit(indicator_images[6], (1360/2.4, 460/2.4+oFY))
     if oillight_state == 1:
-        WIN.blit(indicator_images[7], (1500/2.4, 460/2.4))
+        WIN.blit(indicator_images[7], (1500/2.4, 460/2.4+oFY))
     if alt_state == 1:
-        WIN.blit(indicator_images[8], (1640/2.4, 460/2.4))
+        WIN.blit(indicator_images[8], (1640/2.4, 460/2.4+oFY))
     if glow_state == 1:
-        WIN.blit(indicator_images[9], (1780/2.4, 460/2.4))
+        WIN.blit(indicator_images[9], (1780/2.4, 460/2.4+oFY))
 
     #   To highlight the fuel reserve indicator (factory is at 7 litres
     if fuel_status <= 7:
-        WIN.blit(fuelresOn, (1795/2.4, 616/2.4))
+        WIN.blit(fuelresOn, (1795/2.4, 616/2.4+oFY))
     else:
-        WIN.blit(fuelresOff, (1795/2.4, 616/2.4))
+        WIN.blit(fuelresOff, (1795/2.4, 616/2.4+oFY))
 
 #   Main Drawings for the program - Background + Gauges
 def draw_digifiz():
-    WIN.blit(BACKGROUND, (0, 0))
+    WIN.blit(BACKGROUND, (0, 0+oFY))
     rpm.show(WIN)
     coolant.show(WIN)
     boost.show(WIN)
