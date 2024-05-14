@@ -36,7 +36,7 @@ import os
 #   Paho to handle the MQTT subscription from Node-Red
 
 # offset
-oFY = 100
+oFY = 90
 
 # Setup Display
 pygame.init()
@@ -215,31 +215,31 @@ def mileage():
     #   Text File or Odometer and Tripometer Information (pulled from ManxGauged project, just reads from text file
     #   Need to incorporate writing to the file after I figure out how to tabulate the mileage based on GPS or CV
     global odo_font
-    odometer = 0
+    odometer = 114514
     tripometer = 0
-    odofile = open("./odo.txt", "r")
-    odo_from_file_text_line1 = odofile.readline()
-    response = odo_from_file_text_line1.replace('\n', "")
-    response2 = response.replace('\r', "")
-    response3 = response2.replace("./odo:", "")
-    try:
-        odometer = int(response3)
-    except:
-        print("Error: ODO read from file is not an int")
-        error_reading_odo_from_file = 1
-    odometer_arduino = odometer
+    # odofile = open("./odo.txt", "r")
+    # odo_from_file_text_line1 = odofile.readline()
+    # response = odo_from_file_text_line1.replace('\n', "")
+    # response2 = response.replace('\r', "")
+    # response3 = response2.replace("./odo:", "")
+    # try:
+    #     odometer = int(response3)
+    # except:
+    #     print("Error: ODO read from file is not an int")
+    #     error_reading_odo_from_file = 1
+    # odometer_arduino = odometer
 
-    odo_from_file_text_line2 = odofile.readline()
-    response = odo_from_file_text_line2.replace('\n', "")
-    response2 = response.replace('\r', "")
-    response3 = response2.replace("trip:", "")
-    try:
-        tripometer = int(response3)
-    except:
-        print
-        "Error: Trip read from file is not an int"
-        error_reading_odo_from_file = 1
-    odofile.close()
+    # odo_from_file_text_line2 = odofile.readline()
+    # response = odo_from_file_text_line2.replace('\n', "")
+    # response2 = response.replace('\r', "")
+    # response3 = response2.replace("trip:", "")
+    # try:
+    #     tripometer = int(response3)
+    # except:
+    #     print
+    #     "Error: Trip read from file is not an int"
+    #     error_reading_odo_from_file = 1
+    # odofile.close()
 
     digital_odo = odometer
     odo_text = odo_font.render(str(digital_odo), True, NEON_GREEN)
@@ -256,7 +256,7 @@ def draw_fuel_text():
     digital_fuel = fuel_status
     fuel_text = digital_font.render(str(int(digital_fuel)), True, NEON_GREEN)
     text_rect = fuel_text.get_rect()
-    text_rect.midright = 1717, 667+oFY
+    text_rect.midright = (1717/scale, 667/scale+oFY)
     WIN.blit(fuel_text, text_rect)
 
 

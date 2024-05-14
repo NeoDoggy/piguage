@@ -7,12 +7,12 @@ import pygame
 #   testingStatus = False
 
 testingStatus = True
-oFY = 100
+oFY = 90
 scale=2.4
 
 #   Screen Size
 WIDTH, HEIGHT = 800, 480  # use your screens display information
-WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.DOUBLEBUF)# pygame.FULLSCREEN
+WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)# pygame.FULLSCREEN pygame.DOUBLEBUF
 WIN.fill((26,28,26))
 FPS = 60
 
