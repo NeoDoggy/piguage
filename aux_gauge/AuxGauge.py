@@ -24,6 +24,7 @@ class AuxGauge:
 		'''Function to apply the int to the image, so setting the display to match the values'''
 		image = str(frame)+".png"
 		self.image = pygame.image.load('images/gauges/aux' + image)
+		self.image = pygame.transform.scale(self.image,(self.image.get_size()[0]/2.4,self.image.get_size()[1]/2.4))
 
 	def get_pos(self):
 		return (self.posxy)

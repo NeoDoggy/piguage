@@ -19,6 +19,7 @@ class RpmGauge:
 	def set_image(self, frame):
 		image = str(frame)+"00.png"
 		self.image = pygame.image.load('images/rpm/RPM ' + image)
+		self.image = pygame.transform.scale(self.image, (1166/2.4,418/2.4))
 
 	def get_pos(self):
 		return (self.posxy)

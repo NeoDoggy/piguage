@@ -6,19 +6,22 @@ import pygame
 #   Will potentially change this in future to have full gauge functionality.
 #   testingStatus = False
 
-testingStatus = False
+testingStatus = True
+
+scale=2.4
 
 #   Screen Size
-WIDTH, HEIGHT = 1920, 720  # use your screens display information
+WIDTH, HEIGHT = 800, 480  # use your screens display information
 WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.DOUBLEBUF)
+WIN.fill((26,28,26))
 FPS = 60
 
 # Title and Icon
 ICON = "images/speedometer.png"
 BG = "images/background.png"
 programIcon = pygame.image.load(ICON)
-project_name = "Digifiz Dashboard - "
-digifiz_ver = "v. 0.5"
+project_name = "piguage - "
+digifiz_ver = "v. 0.1"
 
 #   Colours
 NEON_YELLOW = (236, 253, 147)   #   Speedo Colour
@@ -27,30 +30,34 @@ DARK_GREY = (9, 52, 50)         #   background of the digits (for the 7segment a
 
 #   Font Details
 FONT_PATH = "fonts/DSEG7Classic-Bold.ttf"
-FONT_LARGE = 174    #   Speedo size
-FONT_MEDIUM = 94    #   Clock, MFA, Fuel size
-FONT_SMALL = 67     #   Odo Size
+FONT_LARGE = int(174/scale)    #   Speedo size
+FONT_MEDIUM = int(94/scale)    #   Clock, MFA, Fuel size
+FONT_SMALL = int(67/scale)     #   Odo Size
 
 
 #   Locations for gauge graphics, each has the same start XY but builds upon it, check images folder
-RPM_XY = (135, 5)
-COOLANT_XY = (1481, 105)
-EGT_XY = (1599, 105)
-OILPRESSURE_XY = (1711, 105)
-BOOST_XY = (1822, 105)
-CLOCK_XY = (555, 620)
-FUEL_XY = (1560, 620)
-ODO_XY = (60, 644)
-ODO_L_XY = (395, 678)
-MFA_XY = (1435, 668)
-MFABG_XY = (1021, 563)
-SPEEDO_XY = (1247, 305)
+RPM_XY = (135/scale, 5)
+COOLANT_XY = (1481/scale, 105/scale)
+EGT_XY = (1599/scale, 105/scale)
+OILPRESSURE_XY = (1711/scale, 105/scale)
+BOOST_XY = (1822/scale, 105/scale)
+CLOCK_XY = (555/scale, 620/scale+1)
+FUEL_XY = (1560/scale, 620/scale)
+ODO_XY = (60/scale, 644/scale)
+ODO_L_XY = (395/scale, 678/scale)
+MFA_XY = (1435/scale, 668/scale)
+MFABG_XY = (1021/scale, 563/scale)
+SPEEDO_XY = (1247/scale, 305/scale)
 
 
 
 '''                         LOAD IMAGES                         '''
 
 BACKGROUND = pygame.image.load(BG).convert_alpha()
+BACKGROUND = pygame.transform.scale(BACKGROUND, (BACKGROUND.get_size()[0]/scale, BACKGROUND.get_size()[1]/scale))
 MFA = pygame.image.load("images/indicators/MFA_temp.png").convert_alpha()
+MFA = pygame.transform.scale(MFA,(MFA.get_size()[0]/scale,MFA.get_size()[1]/scale))
 fuelresOn = pygame.image.load("images/indicators/fuelResOn.png").convert_alpha()
+fuelresOn = pygame.transform.scale(fuelresOn,(fuelresOn.get_size()[0]/scale,fuelresOn.get_size()[1]/scale))
 fuelresOff = pygame.image.load("images/indicators/fuelResOff.png").convert_alpha()
+fuelresOff = pygame.transform.scale(fuelresOff,(fuelresOff.get_size()[0]/scale,fuelresOff.get_size()[1]/scale))

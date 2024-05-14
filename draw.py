@@ -66,7 +66,7 @@ def draw_fuel_text():
     digital_fuel = fuel_status
     fuel_text = digital_font.render(str(int(digital_fuel)), True, NEON_GREEN)
     text_rect = fuel_text.get_rect()
-    text_rect.midright = 1717, 667
+    text_rect.midright = 1717, 100 #667
     WIN.blit(fuel_text, text_rect)
 
 

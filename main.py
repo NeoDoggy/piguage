@@ -62,6 +62,7 @@ rpm = RpmGauge(RPM_XY, 50)
 indicator_images = []
 for i in range(10):
     image = pygame.image.load(("images/indicators/ind" + str(i) + ".png"))
+    image = pygame.transform.scale(image, (image.get_size()[0]/2.4, image.get_size()[1]/2.4))
     indicator_images.append(image)
 
 
@@ -290,31 +291,31 @@ def draw_indicators():
     '''
 
     if illumination_state == 1:
-        WIN.blit(indicator_images[0], (45, 460))
+        WIN.blit(indicator_images[0], (45/2.4, 460/2.4))
     if foglight_state == 1:
-        WIN.blit(indicator_images[1], (185, 460))
+        WIN.blit(indicator_images[1], (185/2.4, 460/2.4))
     if defog_state == 1:
-        WIN.blit(indicator_images[2], (325, 460))
+        WIN.blit(indicator_images[2], (325/2.4, 460/2.4))
     if highbeam_state == 1:
-        WIN.blit(indicator_images[3], (465, 460))
+        WIN.blit(indicator_images[3], (465/2.4, 460/2.4))
     if leftturn_state == 1:
-        WIN.blit(indicator_images[4], (605, 460))
+        WIN.blit(indicator_images[4], (605/2.4, 460/2.4))
     if rightturn_state == 1:
-        WIN.blit(indicator_images[5], (1220, 460))
+        WIN.blit(indicator_images[5], (1220/2.4, 460/2.4))
     if brakewarn_state == 1:
-        WIN.blit(indicator_images[6], (1360, 460))
+        WIN.blit(indicator_images[6], (1360/2.4, 460/2.4))
     if oillight_state == 1:
-        WIN.blit(indicator_images[7], (1500, 460))
+        WIN.blit(indicator_images[7], (1500/2.4, 460/2.4))
     if alt_state == 1:
-        WIN.blit(indicator_images[8], (1640, 460))
+        WIN.blit(indicator_images[8], (1640/2.4, 460/2.4))
     if glow_state == 1:
-        WIN.blit(indicator_images[9], (1780, 460))
+        WIN.blit(indicator_images[9], (1780/2.4, 460/2.4))
 
     #   To highlight the fuel reserve indicator (factory is at 7 litres
     if fuel_status <= 7:
-        WIN.blit(fuelresOn, (1795, 616))
+        WIN.blit(fuelresOn, (1795/2.4, 616/2.4))
     else:
-        WIN.blit(fuelresOff, (1795, 616))
+        WIN.blit(fuelresOff, (1795/2.4, 616/2.4))
 
 #   Main Drawings for the program - Background + Gauges
 def draw_digifiz():
@@ -346,7 +347,7 @@ def main():
     # client.loop_start()  # start the loop
     i=0
 
-    pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    # pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     #   The main loop, clock setting and click x for quit etc.
     run = True
     while run:
@@ -354,36 +355,24 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-
-
-        #   MQTT Call backs... putting values in from topics
-
-        # client.subscribe("#") #     Subscribes to all topics
-        # client.message_callback_add('engine/rpm/state', on_message_rpm)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            pygame.quit()
+        if keys[pygame.K_UP]:
+            i=(i+1)%51
+        if keys[pygame.K_DOWN]:
+            i=0 if i-1<0 else i-1
         rpm.set_frame(i)
-        # client.message_callback_add('engine/egt/state', on_message_egt)
-        # client.message_callback_add('engine/oilpressure/state', on_message_oilpressure)
-        # client.message_callback_add('engine/boost/state', on_message_boost)
-        # client.message_callback_add('engine/coolant/state', on_message_coolant)
-        # client.message_callback_add('engine/fuel/state', on_message_fuel)
-        # client.message_callback_add('cabin/outside_temp/state', on_message_outside_temp)
-        # client.message_callback_add('cabin/speed_cv/state', on_message_speed_cv)
+        boost.set_frame(i%20)
+        oilpressure.set_frame(i%20)
+        egt.set_frame(i%20)
+        coolant.set_frame(i%20)
         global speed_status
         speed_status=i*3
-        # client.message_callback_add('indicator/illumination/state', on_message_illumination)
-        # client.message_callback_add('indicator/foglight/state', on_message_foglight)
-        # client.message_callback_add('indicator/defog/state', on_message_defog)
-        # client.message_callback_add('indicator/highbeam/state', on_message_highbeam)
-        # client.message_callback_add('indicator/leftturn/state', on_message_leftturn)
-        # client.message_callback_add('indicator/rightturn/state', on_message_rightturn)
-        # client.message_callback_add('indicator/brakewarn/state', on_message_brakewarn)
-        # client.message_callback_add('indicator/oillight/state', on_message_oillight)
-        # client.message_callback_add('indicator/alt/state', on_message_alt)
-        # client.message_callback_add('indicator/glow/state', on_message_glow)
-
+        global fuel_status
+        fuel_status=i
         draw_digifiz()
         pygame.display.update()
-        i=(i+1)%51
     pygame.quit()
 
 
