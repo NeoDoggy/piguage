@@ -21,7 +21,7 @@
 
 import pygame
 from datetime import datetime
-import paho.mqtt.client as mqttClient
+# import paho.mqtt.client as mqttClient
 from rpm.rpm import RpmGauge
 from aux_gauge.AuxGauge import AuxGauge
 from constants import *
@@ -64,7 +64,7 @@ rpm = RpmGauge(RPM_XY, 50)
 #   Creating the list for the indicator gauges
 indicator_images = []
 for i in range(10):
-    image = pygame.image.load(("images/indicators/ind" + str(i) + ".png"))
+    image = pygame.image.load(("./images/indicators/ind" + str(i) + ".png"))
     image = pygame.transform.scale(image, (image.get_size()[0]/2.4, image.get_size()[1]/2.4))
     indicator_images.append(image)
 
@@ -217,11 +217,11 @@ def mileage():
     global odo_font
     odometer = 0
     tripometer = 0
-    odofile = open("odo.txt", "r")
+    odofile = open("./odo.txt", "r")
     odo_from_file_text_line1 = odofile.readline()
     response = odo_from_file_text_line1.replace('\n', "")
     response2 = response.replace('\r', "")
-    response3 = response2.replace("odo:", "")
+    response3 = response2.replace("./odo:", "")
     try:
         odometer = int(response3)
     except:

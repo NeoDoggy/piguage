@@ -17,8 +17,8 @@ WIN.fill((26,28,26))
 FPS = 60
 
 # Title and Icon
-ICON = "images/speedometer.png"
-BG = "images/background.png"
+ICON = "./images/speedometer.png"
+BG = "./images/background.png"
 programIcon = pygame.image.load(ICON)
 project_name = "piguage - "
 digifiz_ver = "v. 0.1"
@@ -29,7 +29,7 @@ NEON_GREEN = (145, 213, 89)     #   Lower gauge colours, clock, odo etc
 DARK_GREY = (9, 52, 50)         #   background of the digits (for the 7segment appearance)
 
 #   Font Details
-FONT_PATH = "fonts/DSEG7Classic-Bold.ttf"
+FONT_PATH = "./fonts/DSEG7Classic-Bold.ttf"
 FONT_LARGE = int(174/scale)    #   Speedo size
 FONT_MEDIUM = int(94/scale)    #   Clock, MFA, Fuel size
 FONT_SMALL = int(67/scale)     #   Odo Size
@@ -55,9 +55,9 @@ SPEEDO_XY = (1247/scale, 305/scale+oFY)
 
 BACKGROUND = pygame.image.load(BG).convert_alpha()
 BACKGROUND = pygame.transform.scale(BACKGROUND, (BACKGROUND.get_size()[0]/scale, BACKGROUND.get_size()[1]/scale))
-MFA = pygame.image.load("images/indicators/MFA_temp.png").convert_alpha()
+MFA = pygame.image.load("./images/indicators/MFA_temp.png").convert_alpha()
 MFA = pygame.transform.scale(MFA,(MFA.get_size()[0]/scale,MFA.get_size()[1]/scale))
-fuelresOn = pygame.image.load("images/indicators/fuelResOn.png").convert_alpha()
+fuelresOn = pygame.image.load("./images/indicators/fuelResOn.png").convert_alpha()
 fuelresOn = pygame.transform.scale(fuelresOn,(fuelresOn.get_size()[0]/scale,fuelresOn.get_size()[1]/scale))
-fuelresOff = pygame.image.load("images/indicators/fuelResOff.png").convert_alpha()
+fuelresOff = pygame.image.load("./images/indicators/fuelResOff.png").convert_alpha()
 fuelresOff = pygame.transform.scale(fuelresOff,(fuelresOff.get_size()[0]/scale,fuelresOff.get_size()[1]/scale))
