@@ -18,7 +18,11 @@
 
 """
 
-
+from geopy.geocoders import Nominatim
+import serial
+import time
+import string
+import pynmea2
 import pygame
 from datetime import datetime
 # import paho.mqtt.client as mqttClient
