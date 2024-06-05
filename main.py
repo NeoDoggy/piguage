@@ -1,43 +1,14 @@
-"""
-    Digifiz     v.03
-    March 4th, 2021
-
-    Attempting to code the Digifiz dash project cleaner
-    Written by GFunkBus76 in 2021
-
-    Opensource and designed from many online projects...
-    Copy, paste, run, debug... repeat lol.
-
-    Mainly inspired by ManxGauged and miata-dash on github.
-    Redefined and cleaned up a bit.
-    Use at your own discretion.
-
-    Happy to help you if I can.
-
-    https://github.com/gfunkbus76
-
-"""
-
 from geopy.geocoders import Nominatim
 import serial
-import time
-import string
-import pynmea2
 import pygame
 from datetime import datetime
-# import paho.mqtt.client as mqttClient
 from rpm.rpm import RpmGauge
 from aux_gauge.AuxGauge import AuxGauge
 from constants import *
 from variables import *
 from draw import *
-import random
-import time
-import os
-
-#   Import pygame, for main graphics functions
-#   Date time is for the clock and perhaps MQTT
-#   Paho to handle the MQTT subscription from Node-Red
+import obd
+from micropyGPS import MicropyGPS
 
 # offset
 oFY = 90
@@ -71,145 +42,6 @@ for i in range(10):
     image = pygame.image.load(("./images/indicators/ind" + str(i) + ".png"))
     image = pygame.transform.scale(image, (image.get_size()[0]/2.4, image.get_size()[1]/2.4))
     indicator_images.append(image)
-
-
-######
-#       MQTT Connection Function
-######
-
-
-def on_connect(client, userdata, flags, rc):
-    if rc == 0:
-        print("Connected to broker")
-        global Connected  # Use global variable
-        Connected = True  # Signal connection
-    else: print("Connection failed")
-
-
-def on_message(client, userdata, message): print(message.topic + " " + message.payload.decode())
-
-
-######
-#       ENGINE TOPIC MQTT
-######
-
-def on_message_rpm(digi, obj, message):
-    rpm_mqtt = int((message.payload.decode()))
-    rpm.set_frame(rpm_mqtt)
-
-
-def on_message_coolant(digi, obj, message):
-    coolant_mqtt = int((message.payload.decode()))
-    coolant.set_frame(coolant_mqtt)
-
-
-def on_message_egt(digi, obj, message):
-    egt_mqtt = int((message.payload.decode()))
-    egt.set_frame(egt_mqtt)
-
-
-def on_message_oilpressure(digi, obj, message):
-    oilpressure_mqtt = int((message.payload.decode()))
-    oilpressure.set_frame(oilpressure_mqtt)
-
-
-def on_message_boost(digi, obj, message):
-    boost_mqtt = int((message.payload.decode()))
-    boost.set_frame(boost_mqtt)
-
-
-######
-#       CABIN TOPIC MQTT
-######
-
-def on_message_speed_cv(digi, obj, message):
-    global speed_status
-    speed_cv_mqtt = int((message.payload.decode()))
-    # speed_status = 55
-    speed_status = speed_cv_mqtt
-
-
-def on_message_speed_gps(digi, obj, message):
-    global speed_gps_status
-    speed_gps_mqtt = int((message.payload.decode()))
-    speed_gps_status = speed_gps_mqtt
-
-
-def on_message_outside_temp(digi, obj, message):
-    global outside_temp_status
-    outside_temp_mqtt = int((message.payload.decode()))
-    outside_temp_status = outside_temp_mqtt
-
-
-def on_message_fuel(digi, obj, message):
-    global fuel_status
-    fuel_mqtt = int((message.payload.decode()))
-    fuel_status = fuel_mqtt
-
-
-######
-#       INDICATOR TOPIC MQTT
-######
-
-def on_message_illumination(digi, obj, message):
-    global illumination_state
-    illumination_mqtt = int((message.payload.decode()))
-    illumination_state = illumination_mqtt
-
-
-def on_message_foglight(digi, obj, message):
-    global foglight_state
-    foglight_mqtt = int((message.payload.decode()))
-    foglight_state = foglight_mqtt
-
-
-def on_message_defog(digi, obj, message):
-    global defog_state
-    defog_mqtt = int((message.payload.decode()))
-    defog_state = defog_mqtt
-
-
-def on_message_highbeam(digi, obj, message):
-    global highbeam_state
-    highbeam_mqtt = int((message.payload.decode()))
-    highbeam_state = highbeam_mqtt
-
-
-def on_message_leftturn(digi, obj, message):
-    global leftturn_state
-    leftturn_mqtt = int((message.payload.decode()))
-    leftturn_state = leftturn_mqtt
-
-
-def on_message_rightturn(digi, obj, message):
-    global rightturn_state
-    rightturn_mqtt = int((message.payload.decode()))
-    rightturn_state = rightturn_mqtt
-
-
-def on_message_brakewarn(digi, obj, message):
-    global brakewarn_state
-    brakewarn_mqtt = int((message.payload.decode()))
-    brakewarn_state = brakewarn_mqtt
-
-
-def on_message_oillight(digi, obj, message):
-    global oillight_state
-    oillight_mqtt = int((message.payload.decode()))
-    oillight_state = oillight_mqtt
-
-
-def on_message_alt(digi, obj, message):
-    global alt_state
-    alt_mqtt = int((message.payload.decode()))
-    alt_state = alt_mqtt
-
-
-def on_message_glow(digi, obj, message):
-    global glow_state
-    glow_mqtt = int((message.payload.decode()))
-    glow_state = glow_mqtt
-
 
 ######
 #       Various Functions for Dash
@@ -344,40 +176,37 @@ def draw_digifiz():
 #####
 
 def main():
-    #   MQTT Variables
-    # broker_address = "localhost"  # Broker address
-    # port = 1880  # Broker port
-    # client = mqttClient.Client("pytest")  # create new instance
-    # client.on_connect = on_connect  # attach function to callback
-    # client.on_message = on_message  # attach function to callback
-    # client.connect(broker_address, port=port)  # connect to broker
-    # client.loop_start()  # start the loop
     i=0
-
-    # pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-    #   The main loop, clock setting and click x for quit etc.
+    ser = serial.Serial("/dev/ttyUSB0", 9600)
+    my_gps = MicropyGPS()
+    conn=obd.OBD() #connect to BT or TTL
     run = True
     while run:
         clock.tick(FPS/3)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_ESCAPE]:
-            pygame.quit()
-        if keys[pygame.K_UP]:
-            i=(i+1)%51
-        if keys[pygame.K_DOWN]:
-            i=0 if i-1<0 else i-1
-        rpm.set_frame(i)
-        boost.set_frame(i%20)
-        oilpressure.set_frame(i%20)
-        egt.set_frame(i%20)
-        coolant.set_frame(i%20)
-        global speed_status
-        speed_status=i*3
-        global fuel_status
-        fuel_status=i
+        # keys = pygame.key.get_pressed()
+        # if keys[pygame.K_ESCAPE]:
+        #     pygame.quit()
+        # if keys[pygame.K_UP]:
+        #     i=(i+1)%51
+        # if keys[pygame.K_DOWN]:
+        #     i=0 if i-1<0 else i-1
+        nmea=ser.readline().decode().strip()
+        if(nmea.startswith("$GPVTG")):
+            speed=nmea.split(',')[7]
+            global speed_status
+            speed_status=int(speed)
+        cmd=obd.commands.RPM
+        res=conn.query(cmd)
+        rpm.set_frame(max(50,int(res.value)))
+        # boost.set_frame(i%20)
+        # oilpressure.set_frame(i%20)
+        # egt.set_frame(i%20)
+        # coolant.set_frame(i%20)
+        # global fuel_status
+        # fuel_status=i
         draw_digifiz()
         pygame.display.update()
     pygame.quit()
